@@ -1,9 +1,42 @@
+class Player
+  attr_accessor :name, :lives
+  def initialize(name)
+    @name = name
+    @lives = 3
+  end
+end
+
+class Question
+  attr_accessor :num1, :num2, :answer, :operator
+  def initialize
+    @num1 = 1 + rand(20)
+    @num2 = 1 + rand(20)
+    @operator = ["+", "-", "*"].sample
+    @answer = num1.method(operator).(num2)
+  end
+
+  def generate_question
+    puts "#{@current_player.name}, What is #{num1} #{operator} #{num2}?"
+
+  end
+
+  def verify_answer(user_answer)
+    if user_answer.to_i == @answer
+      return true 
+    else 
+      return false
+    end
+  end
+
+
+end
+
+
 
 
 class Game
   
   attr_reader :p1, :p2, :current_player
-
   def initialize
     puts "Enter first player name: "
     p1name = gets.chomp
@@ -18,18 +51,9 @@ class Game
     while @p1.lives > 0 && @p2.lives > 0
       ask_question
     end
-      puts "#{@current_player.name} wins!"
-      puts "play again?"
-      cont = gets.chomp.downcase
-      if cont == "yes"
-        @p1.lives = 3
-        @p2.lives = 3
-        start
+      puts "#{@current_player.name} loses!"
 
-      else
-        puts "GAME OVER"
-      end
-    end
+  end
 
   def switch_player
     if @current_player == @p1
@@ -50,13 +74,13 @@ class Game
     result = q.verify_answer(answ_input)
 
     if result == true 
-      puts "Good job" 
+      puts "good job" 
       puts "#{@current_player.name} score: #{@current_player.lives}"
     else
-      puts "Bad job!"
-      print "#{@current_player.name} loses one point!".colorize(:red)
+      puts "bad job"
+      p @current_player
       @current_player.lives -= 1
-      puts " #{@current_player.name} score: #{@current_player.lives}"
+      puts "#{@current_player.name} score: #{@current_player.lives}"
     end
     switch_player
 
@@ -80,4 +104,6 @@ class Game
 
 
 end
+game = Game.new
+game.start
 
